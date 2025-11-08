@@ -18,7 +18,10 @@ sudo docker run -d \
   -v nexus-data:/nexus-data \
   sonatype/nexus3
 
-# Wait for startup (3-5 minutes)
+# Check container status
+sudo docker ps | grep nexus
+
+# View logs
 sudo docker logs -f nexus
 ```
 
@@ -69,19 +72,6 @@ sudo docker exec -it nexus cat /nexus-data/admin.password
    - Type: maven2 (hosted)
    - Name: `maven-snapshots`
    - Version policy: `Snapshot`
-
-
-### Verify Installation
-```sh
-# Check container status
-sudo docker ps | grep nexus
-
-# View logs
-sudo docker logs nexus
-
-# Access web UI
-curl http://<server_ip>:8081
-```
 
 
 ### Common Commands

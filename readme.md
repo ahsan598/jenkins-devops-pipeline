@@ -5,9 +5,7 @@ This project sets up a complete CI/CD pipeline automating build → test → sca
 
 ### 🧠 Pipeline Workflow
 ```txt
-Developer → Git → Jenkins Pipeline →
-SonarQube Scan → Trivy Scan → Nexus Upload →
-Docker Build → Kubernetes Deployment
+Developer → Git → Jenkins Pipeline → SonarQube Scan → Trivy Scan → Nexus Upload → Docker Build → Kubernetes Deployment
 ```
 
 
@@ -36,9 +34,10 @@ Jenkins-Pipeline-Setup/
 | Phase                     | Description                                                 |
 | ------------------------- | ----------------------------------------------------------- |
 | **1. Jenkins Setup**      | Install Jenkins, Docker, Trivy & configure pipeline plugins |
-| **2. SonarQube & Nexus**  | Configure code scanning + artifact storage                  |
-| **3. Kubernetes Cluster** | Setup & connect Jenkins for deployments                     |
-| **4. Pipeline Execution** | Automate end-to-end CI/CD with Jenkinsfile                  |
+| **2. SonarQube & Trivy**  | Code quality + Security scanning                            |
+| **3. Docker & Nexus**     | Containerized app + Artifact storage                        |
+| **4. Kubernetes Cluster** | Setup & connect Jenkins for deployments                     |
+| **5. Pipeline Execution** | Automate end-to-end CI/CD with Jenkinsfile                  |
 
 
 ### 📦 Pipeline Stages

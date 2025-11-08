@@ -36,7 +36,7 @@ Quick guide to launch **3 Ubuntu** EC2 instances for **Jenkins, SonarQube, and N
     Custom TCP  |  TCP       |  8082        |  0.0.0.0/0  |  Nexus Docker       
     Custom TCP  |  TCP       |  3000-10000  |  0.0.0.0/0  |  Additional services
     
-   ![Security Group Rules](/assets/imgs/security-group.png)
+   <!-- ![Security Group Rules](/assets/imgs/security-group.png) -->
 
 > **Security Note:** For production, restrict source IPs to your organization's IP range instead of `0.0.0.0/0`
 
@@ -53,9 +53,9 @@ Quick guide to launch **3 Ubuntu** EC2 instances for **Jenkins, SonarQube, and N
 **Fill the details::**
 Field                    |  Value                                
 -------------------------|---------------------------------------
-Name                     |  `devops-key`(or your choice)           
+Name                     |  `devops-key` (or your choice)           
 Key pair type            |  RSA                                  
-Private key file format  |  `.pem`(for Mac/Linux) or `.ppk`(for PuTTY)
+Private key file format  |  `.pem` (for Mac/Linux) or `.ppk` (for PuTTY)
 
 > **Recommended Format:** `.pem` (works with SSH, Git Bash, PowerShell)
 
@@ -109,7 +109,7 @@ After launch, rename for clarity:
 
 #### 3.2 Connect via SSH
 
-Using Powershell / Git Bash:
+Using Powershell / Git Bash / MobaXterm:
 ```sh
 # Connect to Jenkins Server
 ssh -i /path/to/key.pem ubuntu@<JENKINS_IP>

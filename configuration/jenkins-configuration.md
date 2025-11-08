@@ -23,6 +23,7 @@ After completing the basic installation, configure essential DevOps tools and in
 2. Click on **Available plugins** tab
 3. Use the search bar to find and install plugins
 
+
 ### Step 3: Install Required Plugins
 Install the following plugins and **restart** Jenkins when prompted:
 
@@ -140,7 +141,7 @@ Navigate to **Manage Jenkins** → System to configure **external tool** integra
 Navigate to Manage Jenkins → Credentials → (global) → Add Credentials
 
 Credential Type    |  ID                        |  Kind               |  Used For               
--------------------+----------------------------+---------------------+-------------------------
+-------------------|----------------------------|---------------------|-------------------------
 Docker Hub         |  dockerhub-credentials     |  Username/Password  |  Docker image push/pull 
 GitHub Token       |  github-token              |  Secret text        |  GitHub API, webhooks     
 SSH Deploy Key     |  deployment-ssh-key        |  SSH Private Key    |  Server deployment      

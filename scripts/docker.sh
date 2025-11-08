@@ -1,10 +1,10 @@
+#!/bin/bash
+
 # ===========================================================
 # Docker Installation Script for Ubuntu Instances
 # Compatible with Ubuntu 20.04, 22.04, 24.04
 # Installs Docker Engine, CLI, Containerd, Buildx & Compose
 # ===========================================================
-
-#!/bin/bash
 
 # Update package list
 sudo apt update
