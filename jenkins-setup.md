@@ -1,81 +1,79 @@
-# Jenkins CI/CD Server Setup on Ubuntu
+# 🚀 Jenkins CI/CD Server Setup on Ubuntu (Quick Guide)
 
 
-## Overview
-A comprehensive guide for deploying a production-ready Jenkins CI/CD environment with Docker integration and security scanning capabilities.
+## 🎯 Overview
+A simplified guide to set up a **Jenkins CI/CD server** on an Ubuntu AWS instance, integrated with **Docker** for containerized builds and **Trivy** for vulnerability scanning.
 
-This setup provides a complete Jenkins automation server configured with essential DevOps tools:
-- **Jenkins** - CI/CD automation server with Java 21
-- **Docker** - Container engine for building and deploying applications
-- **Trivy** - Security vulnerability scanner for container images
-- **Production-ready** configuration with best practices
+This setup includes:
+- **Jenkins** – CI/CD automation server with Java 21  
+- **Docker** – Container engine for building and deploying applications  
+- **Trivy** – Security vulnerability scanner for container images 
 
 
-## Prerequisites
+## ⚙️ Prerequisites
 Before starting, ensure you have:
-- **Operating System:** Ubuntu 20.04 LTS or higher
-- **System Resources:** Minimum 2GB RAM and 10GB disk space
-- **Access:** Sudo/root privileges
-- **Network:** Internet connectivity for package downloads
+- **AWS EC2 Instance:** Ubuntu 22.04 LTS or higher
+- **Ports Open:**
+  - `8080` → Jenkins Web UI
+  - `22` → SSH Access
+- **Instance Specs:** Minimum 2 vCPU, 4GB RAM, 20GB disk
+- **Privileges:** `sudo` access required
+- **Internet Access:** For package downloads
 
 
-### Required Ports
-Ensure the following ports are accessible in your firewall or security group:
-
-| Service | Port | Purpose |
-|---------|------|---------|
-| Jenkins | 8080 | Web UI and API access |
-| SSH     | 22   | Remote server connection |
-
----
-
-## Installation Guide
+## 🛠️ Installation Steps
 
 ### Step-1: Install Jenkins Server
-Use an automated installation script `jenkins.sh` to simplify setup from [here](/scripts/jenkins.sh).
 ```sh
-# Make the script executable
-chmod +x jenkins.sh
+sudo apt update
+sudo apt install -y openjdk-21-jre-headless
 
-# Run the installation
-./jenkins.sh
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
 
+sudo apt update && sudo apt install -y jenkins
+sudo systemctl enable --now jenkins
+```
+
+**Verify Jenkins:**
+```sh
 # Check Jenkins service status (look for "active (running)")
 sudo systemctl status jenkins --no-pager
 
 # Verify Java version
 java -version
-
-# Confirm Jenkins is listening on port 8080
-sudo ss -tulnp | grep 8080
 ```
-
-What the script does:
-- Installs Java OpenJDK 21 (required for Jenkins)
-- Adds the official Jenkins repository
-- Installs the latest Jenkins LTS version
-- Starts and enables Jenkins service
 
 
 ### Step-2: Docker Installation on Jekins server
-Use an automated installation script `docker.sh` to simplify setup from [here](/scripts/docker.sh).
 ```sh
-# Make the script executable
-sudo chmod +x docker.sh
+sudo apt install -y ca-certificates curl gnupg
 
-# Run the script
-./docker.sh
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+**Verify Docker:**
+```sh
 # Verify Docker installation
 sudo docker --version
-sudo docker compose version
 
 # Verify by running the hello-world image
 sudo docker run hello-world
 ```
 
-### Step-3: Post-Installation Configuration for Jenkins
-Add the Jenkins user to the Docker group to allow Docker commands without `sudo`
+**Allow Jenkins to use Docker:**
 ```sh
 # Add Jenkins system user to docker group
 sudo usermod -aG docker jenkins
@@ -87,40 +85,33 @@ sudo systemctl restart jenkins
 > **Note:** Using `$USER` here will not work for Jenkins pipelines because Jenkins runs under the `jenkins` system user. Always use `jenkins` user for group addition.
 
 
-### Step-4 Trivy Installation on Jenkins server
-Trivy scans container images, filesystems, and Git repositories for vulnerabilities.
-
-Use an automated installation script `trivy.sh` to simplify setup from [here](/scripts/trivy.sh).
-
+### Step-3 Trivy Installation on Jenkins server
 ```sh
-# Make the script executable
-sudo chmod +x trivy.sh
+sudo apt install -y wget apt-transport-https gnupg lsb-release
 
-# Run the script
-./trivy.sh
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
 
+sudo apt update && sudo apt install -y trivy
+```
+
+**Verify Trivy:**
+```sh
 # Verify Trivy installation
 trivy --version
 ```
 
-### Step-5: Ensure Jenkins User Access
-If Trivy is installed system-wide, verify that the Jenkins user can execute it:
-```sh
-# Switch to Jenkins user
-sudo su - jenkins
+### 🌐 Access Jenkins Web UI
 
-# Check Trivy version
-trivy --version
+- **Open in browser:** `http://<EC2-Public-IP>:8080`
+- **Retrieve admin password:**
+```txt
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-> **Note:** If the Jenkins user cannot run Trivy directly, add its path to Jenkins global tool configuration or ensure it is in the system PATH.
+## 🔧 Troubleshooting (Common Issues and Solutions)
 
-
-
-## Troubleshooting (Common Issues and Solutions)
-
-### 1. Jenkins Won't Start
-
+### 1. Jenkins not starting
 ```sh
 # Check logs
 sudo journalctl -u jenkins -f
@@ -130,39 +121,7 @@ sudo systemctl restart jenkins
 
 # Check port availability
 sudo netstat -tulnp | grep 8080
-```
 
-### 2. Docker Permission Denied
-
-```sh
-# Re-add users to docker group
-sudo usermod -aG docker $USER
-sudo usermod -aG docker jenkins
-
-# Restart Docker
-sudo systemctl restart docker
-
-# Restart Jenkins
-sudo systemctl restart jenkins
-```
-
-### 3. Trivy Scan Fails in Jenkins
-
-```sh
-# Verify Trivy is executable by Jenkins
-sudo -u jenkins trivy --version
-
-# Check Trivy path in Jenkins Tools configuration
-which trivy
-
-# Update Trivy database
-trivy image --download-db-only
-```
-
-### System Information Commands
-
-Useful commands for monitoring your Jenkins server:
-```sh
 # Check system resources
 free -h
 df -h
@@ -177,8 +136,33 @@ sudo tail -f /var/log/jenkins/jenkins.log
 sudo systemctl status jenkins docker
 ```
 
+### 2. Docker Permission Denied
+```sh
+# Re-add users to docker group
+sudo usermod -aG docker $USER
+sudo usermod -aG docker jenkins
 
-## Cleanup (Optional)
+# Restart Docker
+sudo systemctl restart docker
+
+# Restart Jenkins
+sudo systemctl restart jenkins
+```
+
+### 3. Trivy Scan Fails in Jenkins
+```sh
+# Verify Trivy is executable by Jenkins
+sudo -u jenkins trivy --version
+
+# Check Trivy path in Jenkins Tools configuration
+which trivy
+
+# Update Trivy database
+trivy image --download-db-only
+```
+
+
+## 🧹 Cleanup (Optional)
 To remove Jenkins and related tools:
 ```sh
 # Stop services
@@ -201,9 +185,8 @@ Follow the Post-Installation Jenkins Configuration Guide [here](/jenkins-configu
 
 ---
 
-## Additional Resources
+## 📚 References
 
-- [Jenkins Documentation](https://www.jenkins.io/doc/)
-- [Docker Documentation](https://docs.docker.com/)
-- [Trivy Documentation](https://aquasecurity.github.io/trivy/)
-- [Jenkins Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/)
+- [Jenkins Docs](https://www.jenkins.io/doc/book/installing/)
+- [Docker Docs](https://docs.docker.com/engine/install/)
+- [Trivy Docs](https://trivy.dev/docs/latest/getting-started/installation/)

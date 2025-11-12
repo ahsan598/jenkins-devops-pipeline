@@ -1,11 +1,14 @@
-# SonarQube Setup (With Database)
+# SonarQube Setup with PostgreSQL (Docker-Based)
 
-For persistent data and better performance:
+SonarQube with PostgreSQL provides persistent storage, better performance, and CI/CD integration with Jenkins.
+
+
+## ⚙️ Setup Steps
 ```sh
-# Create network
+# Create dedicated Docker network
 sudo docker network create sonarnet
 
-# Run PostgreSQL
+# Run PostgreSQL container
 sudo docker run -d \
   --name sonarqube_db \
   --network sonarnet \
@@ -15,7 +18,7 @@ sudo docker run -d \
   -v postgres-data:/var/lib/postgresql/data \
   postgres:latest
 
-# Run SonarQube
+# Run SonarQube container (LTS Community)
 sudo docker run -d \
   --name sonarqube \
   --network sonarnet \
@@ -29,93 +32,64 @@ sudo docker run -d \
   sonarqube:lts-community
 ```
 
-### Generate Authentication Token
-
-**For Jenkins integration:**
-1. Login to SonarQube web UI
-2. Go to Administration → Security → Users
-3. Click Tokens icon for admin user
-4. Generate token:
-   - Name: jenkins
-   - Type: Global Analysis Token
-5. Copy and save the token securely
-
-
 ### Verify Installation
 ```sh
 # Check container status
 sudo docker ps | grep sonarqube
 
 # View logs
-sudo docker logs sonarqube
-
-# Access web UI
-curl http://<server_ip>:9000
-```
-
-
-### Common Commands
-```sh
-# Start
-sudo docker start sonarqube
-
-# Stop
-sudo docker stop sonarqube
-
-# Restart
-sudo docker restart sonarqube
-
-# View logs
 sudo docker logs -f sonarqube
-
-# List volumes
-docker volume ls | grep -E 'sonar'
-
-# Backup volumes
-# Backup Nexus data volume
-sudo docker run --rm \
-  -v nexus-data:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/nexus-backup.tar.gz /data
-
-# Remove containers and volumes
-sudo docker rm -f sonarqube sonarqube_db
-sudo docker volume rm sonarqube-data postgres-data
 ```
 
-### Data Persistence
-Sonar use Docker volumes for data persistence
-```sh
-# List volumes
-sudo docker volume ls | grep -E 'sonar'
-```
 
-**1. Single Container Setup:**
-```sh
-# Backup SonarQube data volume
-docker run --rm \
-  -v sonarqube-data:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/sonarqube-backup.tar.gz /data
+## 🌐 Access SonarQube Web UI
+- **Open in browser:** `http://<EC2-Public-IP>:9000`
+- **Default Login:** `admin / admin`
+- Change password on first login.
 
-```
 
-**2. With Database (Production Setup):**
+## 🔑 Generate Authentication Token (for Jenkins)
+1. Login → **Administration** → **Security** → **Users**
+2. Click token icon for `admin` user
+3. Create new token (e.g., `jenkins-token`)
+4. Save it securely — used in Jenkins integration.
+
+
+## 💾 Backup & Restore
+**Backup:**
 ```sh
 # Backup PostgreSQL data
-sudo docker run --rm \
-  -v postgres-data:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/sonarqube-db-backup.tar.gz /data
+sudo docker run --rm -v postgres-data:/data -v $(pwd):/backup ubuntu \
+  tar czf /backup/sonar-db-backup.tar.gz /data
 
 # Backup SonarQube volumes
-sudo docker run --rm \
-  -v sonarqube-data:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/sonarqube-data-backup.tar.gz /data
-
-sudo docker run --rm \
-  -v sonarqube-extensions:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/sonarqube-extensions-backup.tar.gz /data
+sudo docker run --rm -v sonarqube-data:/data -v $(pwd):/backup ubuntu \
+  tar czf /backup/sonar-data-backup.tar.gz /data
+sudo docker run --rm -v sonarqube-extensions:/data -v $(pwd):/backup ubuntu \
+  tar czf /backup/sonar-extensions-backup.tar.gz /data
 ```
+
+**Restore:**
+Extract tar files back into respective Docker volumes.
+
+
+## 🧰 Useful Commands
+```sh
+# Start / Stop containers
+sudo docker start sonarqube sonarqube_db
+sudo docker stop sonarqube sonarqube_db
+
+# Check volumes
+sudo docker volume ls | grep sonar
+
+# Remove setup (cleanup)
+sudo docker rm -f sonarqube sonarqube_db
+sudo docker volume rm sonarqube-data sonarqube-extensions postgres-data
+```
+
+
+## ✅ Summary
+- Runs SonarQube with PostgreSQL backend for persistence
+- Data stored safely in Docker volumes
+- Ready for Jenkins integration via token authentication
+- Recommended image: sonarqube:lts-community

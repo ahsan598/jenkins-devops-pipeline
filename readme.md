@@ -1,13 +1,19 @@
 # 🚀 Jenkins CI/CD Pipeline Setup
 
-This project sets up a complete CI/CD pipeline automating build → test → scan → package → deploy workflows for containerized applications.
+A comprehensive guide for setting up and deploying a **Jenkins-based** CI/CD environment integrated with **Docker** for containerized builds, **SonarQube** for code quality analysis, **Nexus** for artifact management, and **Trivy** for security vulnerability scanning — enabling automated, secure, and reliable software delivery pipelines.
 
+
+This setup provides a complete Jenkins automation server configured with essential DevOps tools:
+- **Jenkins** - CI/CD automation server used to orchestrate builds, tests, and deployments
+- **Docker** - Containerization for packaging, building, and running applications across environments
+- **SonarQube** - Code quality and static analysis platform (bugs, vulnerabilities, etc..)
+- **Nexus** - Artifact repository manager for Maven, npm, Docker images, stores and serves build artifacts
+- **Trivy** - Vulnerability scanner for container images, file systems, and IaC configurations.
 
 ### 🧠 Pipeline Workflow
 ```txt
 Developer → Git → Jenkins Pipeline → SonarQube Scan → Trivy Scan → Nexus Upload → Docker Build → Kubernetes Deployment
 ```
-
 
 ### 🎯 Key Objectives
 

@@ -1,15 +1,29 @@
-# Nexus Repository Manager Setup with Docker
-Nexus is an artifact repository manager for storing build artifacts, Docker images, and dependencies.
+# 🚀 Nexus Repository Manager Setup with Docker
+
+Nexus Repository Manager 3 is an artifact repository for storing and managing Maven builds, Docker images, npm packages, and other dependencies.
+
+It acts as a central hub for your CI/CD pipelines, caching and distributing artifacts securely.
 
 
-### Quick Start
-Fastest way to get Nexus running:
+## ⚙️ Prerequisites
+Before starting, ensure you have:
+- **AWS EC2 Instance:** Ubuntu 22.04 LTS or higher
+- **Ports Open:**
+  - `8081` → Nexus Web UI
+  - `22` → SSH Access
+- **Instance Specs:** Minimum 4 vCPU, 8GB RAM, 20GB disk
+- **Privileges:** `sudo` access required
+- **Internet Access:** For package downloads
+
+
+## ⚡ Quick Start (Single Container)
+The fastest way to get Nexus running on an Ubuntu server:
 ```sh
 # Update package list
 sudo apt update -y
 
 # Install Docker
-sudo apt install docker.io -y
+sudo apt install -y docker.io
 
 # Run Nexus container
 sudo docker run -d \
@@ -25,36 +39,20 @@ sudo docker ps | grep nexus
 sudo docker logs -f nexus
 ```
 
-### Access Nexus:
-- URL: `http://<server_ip>:8081`
-- Username: admin
-- Password: See below
-
-#### Get Initial Admin Password
-
-**Option 1: From Logs**
-```sh
-sudo docker logs nexus 2>&1 | grep -i password
-```
-
-**Option 2: From Container**
-```sh
-# Access container
-sudo docker exec -it nexus cat /nexus-data/admin.password
-```
-
-### First Login:
-
-1. Open `http://<server_ip>:8081`
-2. Click **Sign In**
-3. Username: `admin`
-4. Password: (from above command)
-5. Follow setup wizard to change password
+## 🌐 Access Nexus Web UI
+Once the container is running:
+- **Open in browser:** `http://<EC2-Public-IP>:8081`
+- **Default Credentials:**
+  - Username: `admin`
+  - Password: from container
+  ```sh
+  sudo docker exec -it nexus cat /nexus-data/admin.password
+  ```
+- **Recommendation:** Change the password immediately after first login.
 
 
-### Configure Repositories
-
-#### After login, setup these repositories:**
+## ⚙️ Configure Repositories
+After login, create or verify these repositories:
 
 **1. Docker Registry (Hosted):**
    - Navigate to **Settings → Repositories → Create repository**
@@ -72,42 +70,3 @@ sudo docker exec -it nexus cat /nexus-data/admin.password
    - Type: maven2 (hosted)
    - Name: `maven-snapshots`
    - Version policy: `Snapshot`
-
-
-### Common Commands
-```sh
-# Start
-sudo docker start nexus
-
-# Stop
-sudo docker stop nexus
-
-# Restart
-sudo docker restart nexus
-
-# View logs
-sudo docker logs -f nexus
-
-# List volumes
-docker volume ls | grep -E 'nexus'
-
-# Remove containers and volumes
-docker rm -f nexus
-docker volume rm nexus-data
-```
-
-### Data Persistence
-Nexus use Docker volumes for data persistence
-
-```sh
-# List volumes
-sudo docker volume ls | grep -E 'nexus'
-```
-
-Backup Nexus data volume
-```sh
-sudo docker run --rm \
-  -v nexus-data:/data \
-  -v $(pwd):/backup \
-  ubuntu tar czf /backup/nexus-backup.tar.gz /data
-```

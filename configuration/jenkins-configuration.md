@@ -198,3 +198,7 @@ Now that your Jenkins server is ready:
 
 **Setup Complete!** 🎉
 Your Jenkins CI/CD server is now ready for building, testing, and deploying applications with Docker and security scanning capabilities.
+
+### Resources
+
+[Jenkins Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/)
