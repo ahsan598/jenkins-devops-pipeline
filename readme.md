@@ -82,3 +82,14 @@ Jenkins-Pipeline-Setup/
 
 ### 🏁 Conclusion
 This architecture delivers a secure, scalable, and automated CI/CD pipeline across AWS instances — enabling faster, reliable, and policy-compliant software delivery.
+
+---
+
+### 📚 References
+
+- [Jenkins Docs](https://www.jenkins.io/doc/)
+- [Docker Docs](https://docs.docker.com/)
+- [Trivy Docs](https://trivy.dev/docs/)
+- [SonarQube Docs](https://docs.sonarsource.com/sonarqube-server)
+- [Nexus Docs](https://help.sonatype.com/en/sonatype-nexus-repository.html)
+- [Kubernetes Docs](https://kubernetes.io/docs/home/)

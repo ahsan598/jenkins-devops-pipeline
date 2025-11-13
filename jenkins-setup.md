@@ -188,6 +188,6 @@ Follow the Post-Installation Jenkins Configuration Guide [here](/jenkins-configu
 
 ### 📚 References
 
-- [Jenkins Docs](https://www.jenkins.io/doc/book/installing/)
-- [Docker Docs](https://docs.docker.com/engine/install/)
-- [Trivy Docs](https://trivy.dev/docs/latest/getting-started/installation/)
+- [Install Jenkins](https://www.jenkins.io/doc/book/installing/)
+- [Install Docker](https://docs.docker.com/engine/install/)
+- [Install Trivy](https://trivy.dev/docs/latest/getting-started/installation/)

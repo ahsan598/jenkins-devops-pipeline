@@ -73,3 +73,8 @@ After login, create or verify these repositories:
    - Type: maven2 (hosted)
    - Name: `maven-snapshots`
    - Version policy: `Snapshot`
+
+---
+
+### 📚 References
+- [Install Nexus](https://www.sonatype.com/blog/sonatype-nexus-installation-using-docker)

@@ -50,3 +50,9 @@ Once the container is running:
 
 
 Follow the SonarQube with PostgreSQL Setup Guide [here](/configuration/sonarqube-with-database.md)
+
+---
+
+### 📚 References
+
+- [Install SonarQube](https://docs.sonarsource.com/sonarqube-server/10.8/setup-and-upgrade/install-the-server/installing-sonarqube-from-docker)
