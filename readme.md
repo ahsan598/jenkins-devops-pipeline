@@ -1,27 +1,30 @@
-# 🚀 Jenkins CI/CD Pipeline Setup
+# 🚀 Jenkins CI/CD Pipeline Setup (Multi-Instance on AWS)
 
-A comprehensive guide for setting up and deploying a **Jenkins-based** CI/CD environment integrated with **Docker** for containerized builds, **SonarQube** for code quality analysis, **Nexus** for artifact management, and **Trivy** for security vulnerability scanning — enabling automated, secure, and reliable software delivery pipelines.
+A production-grade CI/CD architecture powered by **Jenkins**, integrated with **Docker, SonarQube, Nexus, and Trivy** for secure and automated software delivery — deployed across dedicated AWS EC2 instances.
 
 
-This setup provides a complete Jenkins automation server configured with essential DevOps tools:
-- **Jenkins** - CI/CD automation server used to orchestrate builds, tests, and deployments
-- **Docker** - Containerization for packaging, building, and running applications across environments
-- **SonarQube** - Code quality and static analysis platform (bugs, vulnerabilities, etc..)
-- **Nexus** - Artifact repository manager for Maven, npm, Docker images, stores and serves build artifacts
-- **Trivy** - Vulnerability scanner for container images, file systems, and IaC configurations.
+### 🎯 Overview
+This setup provisions a complete **DevOps pipeline** distributed across multiple EC2 instances for scalability and fault isolation:
+| Instance               | Purpose                     | Key Tools                  |
+| ---------------------- | --------------------------- | -------------------------- |
+| **Jenkins Server**     | CI/CD Orchestration         | Jenkins, Docker, Trivy     |
+| **SonarQube Server**   | Code Quality & Security     | SonarQube, PostgreSQL      |
+| **Nexus Server**       | Artifact & Image Repository | Nexus Repository Manager 3 |
+| **Kubernetes Cluster** | Application Deployment      | Kubernetes, kubectl, Helm  |
+
+
+### 🎯 Key Objectives
+- Automate CI/CD pipelines using **Jenkins Declarative Pipelines**
+- Integrate **SonarQube** for code quality & security checks
+- Manage build artifacts via **Nexus Repository**
+- Use **Trivy** for vulnerability scanning
+- Deploy containerized apps to **Kubernetes**
+
 
 ### 🧠 Pipeline Workflow
 ```txt
-Developer → Git → Jenkins Pipeline → SonarQube Scan → Trivy Scan → Nexus Upload → Docker Build → Kubernetes Deployment
+Developer → Git Push → Jenkins Pipeline → SonarQube Scan → Trivy Scan → Nexus Upload → Docker Build & Push → Kubernetes Deployment
 ```
-
-### 🎯 Key Objectives
-
-- Set up DevOps infrastructure on AWS EC2
-- Automate CI/CD using Jenkins Pipelines
-- Perform quality & security scanning
-- Store build artifacts in Nexus
-- Deploy containerized apps on Kubernetes
 
 
 ### 📂 Project Structure:
@@ -30,40 +33,52 @@ Jenkins-Pipeline-Setup/
 ├── Jenkins
 ├── SonarQube
 ├── Nexus
-├── source-code
 ├── scripts/
+├── configs/
 └── files/
 ```
 
 
 ### ⚙️ Setup Overview
-| Phase                     | Description                                                 |
-| ------------------------- | ----------------------------------------------------------- |
-| **1. Jenkins Setup**      | Install Jenkins, Docker, Trivy & configure pipeline plugins |
-| **2. SonarQube & Trivy**  | Code quality + Security scanning                            |
-| **3. Docker & Nexus**     | Containerized app + Artifact storage                        |
-| **4. Kubernetes Cluster** | Setup & connect Jenkins for deployments                     |
-| **5. Pipeline Execution** | Automate end-to-end CI/CD with Jenkinsfile                  |
+| Phase                   | Description                                                     |
+| ----------------------- | --------------------------------------------------------------- |
+| **1. Jenkins Setup**    | Install Jenkins, Docker, Trivy; configure plugins & credentials |
+| **2. SonarQube Setup**  | Deploy SonarQube + PostgreSQL for static code analysis          |
+| **3. Nexus Setup**      | Run Nexus Repository for Maven/Docker artifact storage          |
+| **4. Kubernetes Setup** | Deploy cluster and connect Jenkins via kubeconfig               |
+| **5. CI/CD Pipeline**   | Automate build, test, scan, and deploy workflow                 |
 
 
 ### 📦 Pipeline Stages
-1. Checkout Code
-2. Build & Test (Maven / App build tool)
-3. SonarQube Static Code Analysis
+1. Checkout Source Code
+2. Build & Unit Test
+3. SonarQube Code Analysis
 4. Trivy Security Scan
-5. Publish Artifact to Nexus
-6. Docker Image Build & Push
-7. Deploy to Kubernetes
+5. Publish Artifacts to Nexus
+6. Build & Push Docker Image
+7. Deploy to Kubernetes Cluster
 
 
-### 🔍 Tool Access & Ports
-| Tool      | Port | URL                     |
-| --------- | ---- | ----------------------- |
-| Jenkins   | 8080 | http://<server-ip>:8080 |
-| SonarQube | 9000 | http://<server-ip>:9000 |
-| Nexus     | 8081 | http://<server-ip>:8081 |
+### 🔍 Access & Ports
+| Tool                                | Port     | URL Example                    |
+| ----------------------------------- | -------- | ------------------------------ |
+| **Jenkins**                         | `8080`   | http://<jenkins-ip>:8080       |
+| **SonarQube**                       | `9000`   | http://<sonarqube-ip>:9000     |
+| **Nexus**                           | `8081`   | http://<nexus-ip>:8081         |
+| **Kubernetes Dashboard (optional)** | `30000+` | http://<k8s-master>:<nodeport> |
+
+> 🔐 Ensure these ports are allowed in the AWS Security Group for respective EC2 instances.
+
+
+### 🔧 Toolchain Summary
+| Tool           | Function               | Instance Type             |
+| -------------- | ---------------------- | ------------------------- |
+| **Jenkins**    | Pipeline Orchestration | EC2 (t3.medium)           |
+| **SonarQube**  | Code Quality Analysis  | EC2 (t3.medium)           |
+| **Nexus**      | Artifact Repository    | EC2 (t3.medium)           |
+| **Trivy**      | Security Scanning      | Installed on Jenkins node |
+| **Kubernetes** | Application Deployment | Multi-node cluster        |
 
 
 ### 🏁 Conclusion
-
-This pipeline provides a production-ready DevOps workflow that ensures consistent, secure, and automated application delivery across environments.
+This architecture delivers a secure, scalable, and automated CI/CD pipeline across AWS instances — enabling faster, reliable, and policy-compliant software delivery.

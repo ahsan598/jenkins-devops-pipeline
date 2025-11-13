@@ -1,13 +1,13 @@
 # 🚀 SonarQube Setup with Docker
 
 
-## 🎯 Overview
-SonarQube is an open-source platform for continuous code quality and security analysis, used to identify bugs, vulnerabilities, and code smells.
+### 🎯 Overview
+SonarQube is an open-source platform for continuous **code quality and security analysis**, used to identify **bugs, vulnerabilities, and code smells**.
 
 It easily integrates with Jenkins for automated code inspection during CI/CD pipelines.
 
 
-## ⚙️ Prerequisites
+### ⚙️ Prerequisites
 Before starting, ensure you have:
 - **AWS EC2 Instance:** Ubuntu 22.04 LTS or higher
 - **Ports Open:**
@@ -18,7 +18,7 @@ Before starting, ensure you have:
 - **Internet Access:** For package downloads
 
 
-## ⚡ Quick Start (Single-Container Setup)
+### ⚡ Quick Start (Single-Container Setup)
 The fastest way to run SonarQube on an Ubuntu instance using Docker:
 ```sh
 # Update system packages
@@ -40,10 +40,13 @@ sudo docker ps | grep sonarqube
 sudo docker logs -f sonarqube
 ```
 
-## 🌐 Access SonarQube Web UI
+### 🌐 Access SonarQube Web UI
 Once the container is running:
 - **Open in browser:** `http://<EC2-Public-IP>:9000`
 - **Default Credentials:**
   - Username: `admin`
   - Password: `admin`
 - **Recommendation:** Change the password immediately after first login.
+
+
+Follow the SonarQube with PostgreSQL Setup Guide [here](/configuration/sonarqube-with-database.md)

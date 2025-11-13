@@ -1,9 +1,11 @@
 # SonarQube Setup with PostgreSQL (Docker-Based)
 
-SonarQube with PostgreSQL provides persistent storage, better performance, and CI/CD integration with Jenkins.
+
+### 🎯 Overview
+SonarQube with PostgreSQL provides **persistent storage, better performance, and CI/CD integration** with Jenkins.
 
 
-## ⚙️ Setup Steps
+### ⚙️ Setup Steps
 ```sh
 # Create dedicated Docker network
 sudo docker network create sonarnet
@@ -42,13 +44,13 @@ sudo docker logs -f sonarqube
 ```
 
 
-## 🌐 Access SonarQube Web UI
+### 🌐 Access SonarQube Web UI
 - **Open in browser:** `http://<EC2-Public-IP>:9000`
 - **Default Login:** `admin / admin`
 - Change password on first login.
 
 
-## 🔑 Generate Authentication Token (for Jenkins)
+### 🔑 Generate Authentication Token (for Jenkins)
 1. Login → **Administration** → **Security** → **Users**
 2. Click token icon for `admin` user
 3. Create new token (e.g., `jenkins-token`)
@@ -73,7 +75,7 @@ sudo docker run --rm -v sonarqube-extensions:/data -v $(pwd):/backup ubuntu \
 Extract tar files back into respective Docker volumes.
 
 
-## 🧰 Useful Commands
+### 🧰 Useful Commands
 ```sh
 # Start / Stop containers
 sudo docker start sonarqube sonarqube_db
@@ -88,7 +90,7 @@ sudo docker volume rm sonarqube-data sonarqube-extensions postgres-data
 ```
 
 
-## ✅ Summary
+### ✅ Summary
 - Runs SonarQube with PostgreSQL backend for persistence
 - Data stored safely in Docker volumes
 - Ready for Jenkins integration via token authentication

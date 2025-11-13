@@ -1,7 +1,7 @@
 # 🚀 Jenkins CI/CD Server Setup on Ubuntu (Quick Guide)
 
 
-## 🎯 Overview
+### 🎯 Overview
 A simplified guide to set up a **Jenkins CI/CD server** on an Ubuntu AWS instance, integrated with **Docker** for containerized builds and **Trivy** for vulnerability scanning.
 
 This setup includes:
@@ -10,7 +10,7 @@ This setup includes:
 - **Trivy** – Security vulnerability scanner for container images 
 
 
-## ⚙️ Prerequisites
+### ⚙️ Prerequisites
 Before starting, ensure you have:
 - **AWS EC2 Instance:** Ubuntu 22.04 LTS or higher
 - **Ports Open:**
@@ -109,9 +109,11 @@ trivy --version
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-## 🔧 Troubleshooting (Common Issues and Solutions)
+---
 
-### 1. Jenkins not starting
+### 🔧 Troubleshooting (Common Issues and Solutions)
+
+**1. Jenkins not starting**
 ```sh
 # Check logs
 sudo journalctl -u jenkins -f
@@ -136,7 +138,7 @@ sudo tail -f /var/log/jenkins/jenkins.log
 sudo systemctl status jenkins docker
 ```
 
-### 2. Docker Permission Denied
+**2. Docker Permission Denied**
 ```sh
 # Re-add users to docker group
 sudo usermod -aG docker $USER
@@ -149,7 +151,7 @@ sudo systemctl restart docker
 sudo systemctl restart jenkins
 ```
 
-### 3. Trivy Scan Fails in Jenkins
+**3. Trivy Scan Fails in Jenkins**
 ```sh
 # Verify Trivy is executable by Jenkins
 sudo -u jenkins trivy --version
@@ -162,7 +164,7 @@ trivy image --download-db-only
 ```
 
 
-## 🧹 Cleanup (Optional)
+### 🧹 Cleanup (Optional)
 To remove Jenkins and related tools:
 ```sh
 # Stop services
@@ -179,13 +181,12 @@ sudo rm -rf /var/lib/docker
 sudo rm /usr/local/bin/trivy
 ```
 
-
 Follow the Post-Installation Jenkins Configuration Guide [here](/jenkins-configuration.md).
 
 
 ---
 
-## 📚 References
+### 📚 References
 
 - [Jenkins Docs](https://www.jenkins.io/doc/book/installing/)
 - [Docker Docs](https://docs.docker.com/engine/install/)

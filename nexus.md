@@ -1,11 +1,13 @@
 # 🚀 Nexus Repository Manager Setup with Docker
 
-Nexus Repository Manager 3 is an artifact repository for storing and managing Maven builds, Docker images, npm packages, and other dependencies.
+
+### 🎯 Overview
+Nexus Repository Manager 3 is an artifact repository for **storing and managing Maven builds, Docker images, npm packages, and other dependencies**.
 
 It acts as a central hub for your CI/CD pipelines, caching and distributing artifacts securely.
 
 
-## ⚙️ Prerequisites
+### ⚙️ Prerequisites
 Before starting, ensure you have:
 - **AWS EC2 Instance:** Ubuntu 22.04 LTS or higher
 - **Ports Open:**
@@ -16,7 +18,7 @@ Before starting, ensure you have:
 - **Internet Access:** For package downloads
 
 
-## ⚡ Quick Start (Single Container)
+### ⚡ Quick Start (Single Container)
 The fastest way to get Nexus running on an Ubuntu server:
 ```sh
 # Update package list
@@ -39,7 +41,8 @@ sudo docker ps | grep nexus
 sudo docker logs -f nexus
 ```
 
-## 🌐 Access Nexus Web UI
+
+### 🌐 Access Nexus Web UI
 Once the container is running:
 - **Open in browser:** `http://<EC2-Public-IP>:8081`
 - **Default Credentials:**
@@ -51,7 +54,7 @@ Once the container is running:
 - **Recommendation:** Change the password immediately after first login.
 
 
-## ⚙️ Configure Repositories
+### ⚙️ Configure Repositories
 After login, create or verify these repositories:
 
 **1. Docker Registry (Hosted):**
